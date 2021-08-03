@@ -1,11 +1,10 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
 import Routes from "./routes/Routes";
 import {Provider} from "react-redux";
 import {BrowserRouter} from "react-router-dom"
 import routeConfiguration from "./routes/RouteConfig"
 import configureStore from './store';
 import * as crudApi from "./crud"
+import Layout from "./layout"
 
 const store = configureStore({}, crudApi);
 
@@ -15,7 +14,9 @@ function App() {
     <div className="App">
       <Provider store={store}>
         <BrowserRouter>
+        <Layout>
           <Routes routes={routeConfiguration()} />
+        </Layout>
         </BrowserRouter>
       </Provider>
       {/*       <h1>React App</h1>
