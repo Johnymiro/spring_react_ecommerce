@@ -1,82 +1,29 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCurrentUser } from '../../ducks/user.duck';
-import { logout } from '../../ducks/auth.duck';
-import {
-    makeStyles,
-    Container,
-    Paper,
-    Avatar,
-    Typography,
-    Button
-} from '@material-ui/core';
-import {
-    ExitToApp
-} from '@material-ui/icons';
-
-const useStyles = makeStyles((theme) => ({
-    paper: {
-        marginTop: theme.spacing(8),
-        padding: theme.spacing(3),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.primary.main,
-    },
-    button: {
-        marginTop: theme.spacing(4)
-    }
-}));
+//import { fetchCurrentUser } from '../../ducks/user.duck';
+//import { logout } from '../../ducks/auth.duck';
 
 const ProfilePage = props => {
 
     const dispatch = useDispatch();
-    const {
+/*     const {
         currentUser
-    } = useSelector(state => state.user);
-    const classes = useStyles();
+    } = useSelector(state => state.user); */
 
-    React.useEffect(() => {
+/*     React.useEffect(() => {
         dispatch(fetchCurrentUser());
-    }, [dispatch]);
+    }, [dispatch]); */
 
     const handleLogout = () => {
-        const { history } = props;
-        dispatch(logout())
-            .then(() => history.push('/login'))
-            .catch(() => { });
+        console.log("Profile page logout handle")
     }
 
-    const fullName = currentUser && currentUser.displayName;
+/*     const fullName = currentUser && currentUser.displayName;
     const firstLetterName = fullName ? fullName.charAt(0) : null;
-    const email = currentUser && currentUser.email;
+    const email = currentUser && currentUser.email; */
 
     return (
-        <Container component="main" maxWidth="xs">
-
-            <Paper className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    {firstLetterName}
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    {fullName}
-                </Typography>
-                <Typography color="textSecondary">
-                    {email}
-                </Typography>
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    className={classes.button}
-                    startIcon={<ExitToApp />}
-                    onClick={() => handleLogout()}>
-                    Logout
-                </Button>
-            </Paper>
-        </Container>
+        <h1>Profile Page</h1>
     )
 };
 

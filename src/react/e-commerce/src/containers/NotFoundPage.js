@@ -20,7 +20,7 @@ const NotFoundPage = () => {
     return (
         <Container component="main" maxWidth="xs">
             <Paper className={classes.paper}>
-                Not found. <Link to='/login'>Sign in</Link>
+                Page not found. <Link to='/login'>Sign in</Link>
             </Paper>
         </Container>
     );
