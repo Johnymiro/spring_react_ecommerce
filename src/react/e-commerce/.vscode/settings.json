@@ -1,0 +1,26 @@
+{
+    "vim.statusBarColors.surroundinputmode": "",
+    "vim.useCtrlKeys": false,
+    "vim.hlsearch": true,
+    "vim.insertModeKeyBindings": [
+        {
+            "before": [
+                "j",
+                "j"
+            ],
+            "after": [
+                "<Esc>"
+            ]
+        }
+    ],
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+          "before": ["<leader>", "d"],
+          "after": ["d", "d"]
+        },
+        {
+          "before": ["<C-n>"],
+          "commands": [":nohl"]
+        }
+      ],
+}
