@@ -25,6 +25,8 @@ const initialState = {
 
   logoutInProgress: false,
   logoutError: null,
+
+  user: null,
 };
 
 export default function authReducer(state = initialState, action = {}) {
@@ -39,14 +41,23 @@ export default function authReducer(state = initialState, action = {}) {
     case LOGIN_REQUEST:
       return { ...state, loginInProgress: true, loginError: null };
     case LOGIN_SUCCESS:
-      return { ...state, loginInProgress: false, isAuthenticated: true };
+      console.log("Login succes inside the reducer")
+      return {
+        ...state,
+        loginInProgress: false,
+        isAuthenticated: true,
+        user: payload,
+      };
     case LOGIN_ERROR:
       return { ...state, loginInProgress: false, loginError: payload };
 
     case SIGNUP_REQUEST:
       return { ...state, signupInProgress: true, signupError: null };
     case SIGNUP_SUCCESS:
-      return { ...state, signupInProgress: false, isAuthenticated: true };
+      return {
+        ...state,
+        signupInProgress: false,
+      };
     case SIGNUP_ERROR:
       return { ...state, signupInProgress: false, signupError: payload };
 
@@ -67,7 +78,10 @@ export const authInfoSuccess = (user) => ({
 });
 
 export const loginRequest = () => ({ type: LOGIN_REQUEST });
-export const loginSuccess = () => ({ type: LOGIN_SUCCESS });
+export const loginSuccess = (payload) => ({
+  type: LOGIN_SUCCESS,
+  payload,
+});
 export const loginError = (e) => ({ type: LOGIN_ERROR, payload: e });
 
 export const signupRequest = () => ({ type: SIGNUP_REQUEST });
@@ -78,26 +92,39 @@ export const logoutRequest = () => ({ type: LOGOUT_REQUEST });
 export const logoutSuccess = () => ({ type: LOGOUT_SUCCESS });
 export const logoutError = (e) => ({ type: LOGOUT_ERROR, payload: e });
 
-export const login = (username, password) => (dispatch, getState, crudApi) => {
-  dispatch(loginRequest());
-  return crudApi
-    .auth()
-    .signInWithUsernameAndPassword(username, password)
-    .then(() => dispatch(loginSuccess()))
-    .catch((e) => {
-      dispatch(loginError(e));
-      throw e;
-    });
-};
+export const login =
+  ({ username, password }) =>
+  (dispatch, getState, crudApi) => {
+    dispatch(loginRequest());
+    return crudApi
+      .auth()
+      .signInWithUsernameAndPassword({ username, password })
+      .then((res) => {
+        if (!res?.data) {
+          throw Error("Missing data");
+        }
+        console.log("Login Response", res);
+        console.count();
+        dispatch(loginSuccess(res.data));
+        res?.data?.accessToken
+          ? window.localStorage.setItem("jwt", res.data.accessToken)
+          : window.localStorage.setItem("jwt", "");
+      })
+      .catch((e) => {
+        dispatch(loginError(e));
+        throw e;
+      });
+  };
 
 export const signup = (params) => (dispatch, getState, crudApi) => {
-  const { email, password, username, roles} = params;
+  const { email, password, username } = params;
   dispatch(signupRequest());
   return crudApi
     .auth()
-    .createUser({email, password, username, roles})
-    .then((res) => res.user.updateProfile({ displayName: username}))
-    .then(() => dispatch(signupSuccess()))
+    .createUser({ email, password, username })
+    .then((r) => {
+      dispatch(signupSuccess());
+    })
     .catch((e) => {
       dispatch(signupError(e));
       throw e;
